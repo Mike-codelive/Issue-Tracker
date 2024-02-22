@@ -10,7 +10,7 @@ const NavBar = () => {
   const currentPath = usePathname();
   const links = [
     { label: "Dashboard", href: "/" },
-    { label: "Issues", href: "/issues" },
+    { label: "Issues", href: ["/issues", "/issues/new"] },
   ];
 
   return (
@@ -23,17 +23,17 @@ const NavBar = () => {
           <Link
             key={link.href}
             className={classnames({
-              "text-zinc-900": link.href === currentPath,
-              "text-zinc-500": link.href !== currentPath,
+              "text-zinc-900": link.href.includes(currentPath),
+              "text-zinc-500": !link.href.includes(currentPath),
               "hover:border-zinc-800": true,
-              "border-zinc-800": link.href === currentPath,
+              "border-zinc-800": link.href.includes(currentPath),
               "border-transparent": true,
               "border-b-2": true,
               "transition-border": true,
               "duration-300": true,
               "hover:text-zinc-800 transition-colors": true,
             })}
-            href={link.href}
+            href={link.href[0]} // Assuming you always want to use the first href
           >
             {link.label}
           </Link>
