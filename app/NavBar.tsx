@@ -10,8 +10,15 @@ const NavBar = () => {
   const currentPath = usePathname();
   const links = [
     { label: "Dashboard", href: "/" },
-    { label: "Issues", href: ["/issues", "/issues/new"] },
+    {
+      label: "Issues",
+      href: ["/issues", "/issues/new"],
+    },
   ];
+
+  for (let i = 1; i <= 999; i++) {
+    links[1].href.push(`/issues/${i}`);
+  }
 
   return (
     <nav className="flex space-x-6 border-b mb-5 px-5 h-14 items-center">
@@ -33,7 +40,7 @@ const NavBar = () => {
               "duration-300": true,
               "hover:text-zinc-800 transition-colors": true,
             })}
-            href={link.href[0]} // Assuming you always want to use the first href
+            href={link.href[0]}
           >
             {link.label}
           </Link>
