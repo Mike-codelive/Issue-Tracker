@@ -18,6 +18,7 @@ const NavBar = () => {
 
   for (let i = 1; i <= 999; i++) {
     links[1].href.push(`/issues/${i}`);
+    links[1].href.push(`/issues/${i}/edit`);
   }
 
   return (
