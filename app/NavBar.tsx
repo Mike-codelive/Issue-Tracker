@@ -12,7 +12,7 @@ const NavBar = () => {
     { label: "Dashboard", href: "/" },
     {
       label: "Issues",
-      href: ["/issues", "/issues/new"],
+      href: ["/issues/list", "/issues/new"],
     },
   ];
 
