@@ -9,13 +9,14 @@ import { Container, Flex } from "@radix-ui/themes";
 
 const NavBar = () => {
   const currentPath = usePathname();
-  const links = [
+  let links = [
     { label: "Dashboard", href: "/" },
     {
       label: "Issues",
       href: ["/issues/list", "/issues/new"],
     },
   ];
+  links[1].href = ["/issues/list", "/issues/new"];
 
   for (let i = 1; i <= 999; i++) {
     links[1].href.push(`/issues/${i}`);
