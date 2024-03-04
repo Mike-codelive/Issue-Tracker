@@ -4,7 +4,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { issueSchema } from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Issue } from "@prisma/client";
+import { Issue, Status } from "@prisma/client";
 import { Button, Callout, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
@@ -16,8 +16,15 @@ import { z } from "zod";
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
+const statuses: { label: string; value?: Status }[] = [
+  { label: "Open", value: "OPEN" },
+  { label: "In Progress", value: "IN_PROGRESS" },
+  { label: "Closed", value: "CLOSED" },
+];
+
 const IssueForm = ({ issue }: { issue?: Issue }) => {
   const router = useRouter();
+
   const {
     register,
     control,
@@ -32,6 +39,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
+
       if (issue) await axios.patch("/api/issues/" + issue.id, data);
       else await axios.post("/api/issues", data);
       router.push("/issues/list");
@@ -49,7 +57,11 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
-      <form className="space-y-3" onSubmit={onSubmit}>
+      <form
+        name="edit&create new issue"
+        className="space-y-3"
+        onSubmit={onSubmit}
+      >
         <TextField.Root>
           <TextField.Input
             defaultValue={issue?.title}
@@ -67,7 +79,20 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           )}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isSubmitting}>
+
+        <select
+          className="mr-4"
+          {...register("status")}
+          defaultValue={issue?.status || "OPEN"}
+        >
+          {statuses.map((status, index) => (
+            <option key={index} value={status.value || ""}>
+              {status.label}
+            </option>
+          ))}
+        </select>
+
+        <Button type="submit" disabled={isSubmitting}>
           {issue ? "Update Issue" : "Submit New Issue"}{" "}
           {isSubmitting && <Spinner />}
         </Button>
